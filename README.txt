@@ -1,50 +1,35 @@
-Git Bugtraq Configuration specification
+Git Bugtraq 配置规范
 =======================================
-Version 0.3, 2013-11-25
+版本 0.3, 2013-11-25
 
 
-1. Introduction
+1. 介绍
 ---------------
 
-Git commits are often related to specific issues (or bugs). The Git
-Bugtraq Configuration allows to associate a Git commit with a
-corresponding issue ID. Git clients may use this association to provide
-additional functionality, like displaying a hyperlink for issue IDs
-within a commit message which links to the appropriate issue tracker
-web page.
+Git的提交动作经常是与issue或bug相关的。Git Bugtraq配置允许你把Git的提交和相应的issue ID关联起来。Git客户端就可以用这种关联关系提供额外的功能，如在提交的消息中issue ID处显示超链接、链到合适的issue跟踪Web页面。
 
-The Git Bugtraq Configuration is similar to Subversion bugtraq
-properties[1] and includes concepts of Gerrit commentlinks[2].
+Git Bugtraq配置与Subversion bugtrq属性[1]相似，并包含了Gerrit commentlinks[2]中的概念。
 
 
-2. Configuration options
+2. 配置选项
 ------------------------
 
-The main configuration namespace is 'bugtraq'.
+配置的主要名空间为“bugtraq”。
 
-* bugtraq.url (mandatory)
+* bugtraq.url (必填)
 
-specifies the URL of the bug tracking system. It must be properly URI
-encoded and it has to contain %BUGID%. %BUGID% will be replaced by the
-Git client with a concrete issue ID.
+声明bug跟踪系统的URL。其必须是进行了适当URI编码的，且必须包含 %BUGID% 占位符。%BUGID%会被Git客户端替换成具体的issue ID。
 
 
-* bugtraq.logregex (mandatory),
-  bugtraq.loglinkregex (optional) and
-  bugtraq.logfilterregex (optional)
+* bugtraq.logregex (必填),
+  bugtraq.loglinkregex (选填) 与
+  bugtraq.logfilterregex (选填)
 
-specify Perl Compatible Regular Expressions[3] which will be used to
-extract the issue ID from a commit message.
+声明Perl兼容的正则表达式[3]，其将被用于提交消息中提取issue ID。
 
-logregex must contain exactly one matching group, which extracts
-BUGIDs.
+logregex必须是正好只含有一个匹配组，用于提取BUGID。
 
-If present, loglinkregex will be applied before logregex. It must
-contain exactly one matching group, which extracts parts from the
-commit message that should show up as a link. logregex will then be
-applied to every such link to extract the actual BUGID (which is a part
-of the entire link). If loglinkregex is set, logregex must extract
-exactly one BUGID.
+如果匹配上，loglinkregex会在logregex之前被应用。它也是必须只包含一个匹配组，其从提交消息中提取应该显示为一个链接的部分内容，然后logregex被应用到所有这种链接上提取出实际的BUGID。如设置了loglinkregex，logregex必须刚好提取出一个BUGID。
 
 If present, logfilterregex will be applied before logregex (or
 loglinkregex, resp.). It must contain exactly one matching group which
@@ -53,23 +38,23 @@ input for logregex (or loglinkregex, resp.).
 
 Every of these regular expressions may contain additional non-matching
 groups ('(?:') and matches case-sensitive unless explicitly set to
-case-insensitive ('(?i)'). The overall extraction looks as follows:
+case-insensitive ('(?i)'). 全部的提取流程如下：
 
   commit message -> logfilterregex -> loglinkregex -> logregex -> BUGID
 
-Example: with logfilterregex set to
+例 logfilterregex设为:
 
   [Ii]ssues?:?((\s*(,|and)?\s*#\d+)+)
 
-loglinkregex set to
+loglinkregex设为:
 
   #\d+
   
-logregex set to
+logregex设为:
 
   \d+
 
-and having a commit message like
+提交消息像这样:
 
   Issues #3, #4 and #5: Git Bugtraq Configuration options (see rule #12)
 
