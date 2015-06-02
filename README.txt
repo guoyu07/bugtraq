@@ -54,42 +54,36 @@ logregex设为:
 
   \d+
 
-提交消息像这样:
+提交消息n内容像:
 
   Issues #3, #4 and #5: Git Bugtraq Configuration options (see rule #12)
 
-logfilterregex will pick "Issues #3, #4 and #5", loglinkregex will pick
-"#3", "#4", "#5" and logregex will pick "3", "4" and "5".
+logfilterregex 会取到 "Issues #3, #4 and #5", loglinkregex 会取到"#3", "#4", "#5"，logregex 会取到 "3", "4" 和 "5"。
 
-Note: in Git-Config-like files, backslashes need to be escaped (see
-section 5).
+注意: 在Git-Config-like文件中，反斜杠需要被转义。
 
 
-* bugtraq.loglinktext (optional)
+* bugtraq.loglinktext (可选)
 
-specifies a substitution text which will be used to display issue links
-extracted by logregex and loglinkregex, resp. loglinktext must contain
-%BUGID% which will be replaced by the concrete issue ID.
+声明用于显示由logregex 与 loglinkregex提取出的issue链接的替换文本。loglinktext中必须包含%BUGID%占位符，以便替换成具体的issue ID。
 
-Example: with logregex set to "#?(\d+)" and loglinktext set to
-"#%BUGID%", a commit message like
+例  logregex 设为 "#?(\d+)" 且 loglinktext 设为 "#%BUGID%", 提交消息形式
 
   Issue #3, 4, 5: message
   
-will be substituted to
+将会被替换成：
 
   Issue #3, #4, #5: message
 
-with "#3", "#4", "#5" being links to the corresponding issues.
+其中 "#3", "#4", "#5" 变成相应问题Web页面的链接。
 
 
-* bugtraq.enabled (optional)
+* bugtraq.enabled (可选)
 
-specifies whether this Bugtraq Configuration is enabled. It defaults to
-'true'.
+声明Bugtraq配置是否启用。默认为'true'.
 
 
-3. Multiple configurations
+3. 多配置
 --------------------------
 
 There can be multiple configurations, either to support multiple issue
@@ -122,17 +116,15 @@ The other issue ID will be ignored.
 4. Configuration files
 ----------------------
 
-There are two places where the configuration options can be specified:
+配置选项可以在两个地方声明：
 
-* in the .gitbugtraq file in the repository root. This file is using
-  the default Git config file layout.
+* 在仓库根目录 .gitbugtraq 文件中。该文件使用默认的Git配置文件布局。
 
-* in $GIT_DIR/config
+* 在 $GIT_DIR/config 文件中
 
-Options specified in $GIT_DIR/config will override options from
-.gitbugtraq.
+$GIT_DIR/config中声明的选项会覆盖.gitbugtraq.
 
-An example content of .gitbugtraq (note, that '\' need to be escaped):
+.gitbugtraq (注意反斜杠需转义)内容举例:
 
   [bugtraq]
     url = https://host/browse/SG-%BUGID%
@@ -143,7 +135,7 @@ Exactly the same lines could be added as an additional section to
 $GIT_DIR/config as well.
 
 
-5. logregex examples
+5. logregex 举例
 --------------------
 
 * From messages like "Fix: #1" or "fixes:  #1, #2 and #3",
